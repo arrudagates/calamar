@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import SearchInput from "../components/SearchInput";
 import { ReactComponent as Logo } from "../assets/calamar-logo-export-05.svg";
@@ -47,6 +47,8 @@ const StyledSearchInput = styled(SearchInput)`
 `;
 
 function HomePage() {
+  const [network, setNetwork] = useState<string | undefined>();
+
   return (
     <div
       style={{
@@ -68,11 +70,11 @@ function HomePage() {
         }}
       />
       <StyledSearchBox>
-        <StyledNetworkSelect />
-        <StyledSearchInput />
+        <StyledNetworkSelect onChange={setNetwork} value={network} />
+        <StyledSearchInput network={network} />
       </StyledSearchBox>
       <div style={{ margin: "auto", width: "fit-content", marginTop: 24 }}>
-        <Link to="/latest-extrinsics">Show latest extrinsics</Link>
+        <Link to={`/${network}/latest-extrinsics`}>Show latest extrinsics</Link>
       </div>
     </div>
   );

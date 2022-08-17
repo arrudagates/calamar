@@ -1,8 +1,13 @@
-import React, { ReactComponentElement, ReactNode } from "react";
+import React, {
+  ReactComponentElement,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import Background from "../assets/detail-page-bgr.svg";
 import { ReactComponent as Logo } from "../assets/calamar-logo-export-02.svg";
 import SearchInput from "./SearchInput";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import NetworkSelect from "./NetworkSelect";
 
@@ -91,7 +96,16 @@ const StyledNetworkSelect = styled(NetworkSelect)`
   }
 `;
 
-function ResultLayout({ children }: { children: ReactNode }) {
+//function ResultLayout({ children }: { children: ReactNode }) {
+function ResultLayout() {
+  const { network: networkParam } = useParams();
+
+  const [network, setNetwork] = useState<string | undefined>(networkParam);
+
+  useEffect(() => {
+    setNetwork(network);
+  }, [network]);
+
   return (
     <>
       <div
@@ -107,7 +121,9 @@ function ResultLayout({ children }: { children: ReactNode }) {
         }}
       />
       <StyledContent>
-        <div style={{ maxWidth: "1500px", margin: "auto" }}>{children}</div>
+        <div style={{ maxWidth: "1500px", margin: "auto" }}>
+          <Outlet />
+        </div>
       </StyledContent>
       <StyledTopBar>
         <div className="top-bar-content">
@@ -115,10 +131,10 @@ function ResultLayout({ children }: { children: ReactNode }) {
             <Link className="logo" to="/">
               <Logo />
             </Link>
-            <StyledNetworkSelect />
+            <StyledNetworkSelect onChange={setNetwork} value={network} />
           </div>
           <div className="top-bar-second-row">
-            <SearchInput />
+            <SearchInput network={network} />
           </div>
         </div>
       </StyledTopBar>
